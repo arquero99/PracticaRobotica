@@ -53,14 +53,8 @@ def getSonar(clientID, hRobot):
 
     return r
 
-
-#--------------------------------------------------------------------------
 # --------------------------------------------------------------------------
-
-#Aquí habría que calibrar la lectura de los lectores sonar entre izqda y derecha 
-#Valorar también si es necesario añadir nuevos sensores
-
-
+# --------------------------------------------------------------------------
 
 def avoid(sonar):
     if (sonar[3] < 0.1) or (sonar[4] < 0.1):

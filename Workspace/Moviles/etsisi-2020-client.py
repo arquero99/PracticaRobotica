@@ -57,14 +57,29 @@ def getSonar(clientID, hRobot):
 # --------------------------------------------------------------------------
 
 def avoid(sonar):
-    if (sonar[3] < 0.1) or (sonar[4] < 0.1):
-        lspeed, rspeed = +0.3, -0.5
+#	if(sonar[4]<=1.0):
+#		lspeed, rspeed = +1.0, +0.3
+#		if(sonar[4]<0.5 or sonar[3]<0.7):
+#			lspeed, rspeed = +1.0, -1.0
+#	if(sonar[5]<=1-0):
+#		lspeed, rspeed = +0.5, -0.5
+#		if(sonar[6]<0.5 or sonar[6]<0.7):
+#			lspeed, rspeed = +1.0, -1.0
+	 
+    if (sonar[3] < 0.2) or (sonar[4] < 0.2):
+        lspeed, rspeed = +0.5, -0.5
+    elif (sonar[6] < 0.2) or (sonar[5] < 0.2):
+    	lspeed, rspeed = -0.5, +0.5
     elif sonar[1] < 0.3:
-        lspeed, rspeed = +1.0, +0.3
+        lspeed, rspeed = +1.0, +0.3 
+    elif sonar[8] < 0.3:
+        lspeed, rspeed = +0.3, +1.0    
     elif sonar[5] < 0.2:
         lspeed, rspeed = +0.2, +0.7
+    elif sonar[4] < 0.2:
+        lspeed, rspeed = +0.7, +0.2
     else:
-        lspeed, rspeed = +1.7, +2.0
+        lspeed, rspeed = +2.0, +2.0
 
     return lspeed, rspeed
 

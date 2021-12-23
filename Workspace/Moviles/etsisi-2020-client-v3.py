@@ -82,6 +82,21 @@ def getSonar(clientID, hRobot):
 	return r
 
 # --------------------------------------------------------------------------
+def printMeasures(sensor):
+	x = 0
+	while x<16 :
+		print('-----------------')
+		print(x)
+		print(sensor[x])
+		x=x+1
+
+def printRegions():
+	global regions_
+	for reg in regions_:
+		print('--------')
+		print(reg)
+		print(regions_[reg])
+
 # --------------------------------------------------------------------------
 
 def avoid():
@@ -94,7 +109,7 @@ def avoid():
 	elif(state_==1): 
 		lspeed, rspeed = -3.0, +3.0
 	elif(state_==2):
-		lspeed, rspeed = +2.0, -2.0
+		lspeed, rspeed = +3.0, -3.0
 	elif(state_==3):
  		lspeed, rspeed = 0.0, 0.0
 	return lspeed, rspeed
@@ -124,6 +139,7 @@ def analyseSonar(sonar):			#Set distances between Pioneer and obstacles in all c
 	print('analyse finish')
  	
 #--------------------------------------------------
+
 def control():						#decides whats the next state based on perception
 	global regions_, rotating, wall_dist
 	
@@ -131,15 +147,14 @@ def control():						#decides whats the next state based on perception
 	regions=regions_
 	
 	state_description = ''
-	
-	if (regions['left']==range):
-		if (regions['front']==range or (regions['bright']==range and regions['right']==range)):
-			state_description= 'Case 3. EndPoint'
-			setState(3)
-		else :
-			state_description = 'Case 1. Turn Left'
-			rotating=1
-			setState(1)
+
+	if (isEndpoint(regions)):
+		state_description= 'Case 3. EndPoint'
+		setState(3)
+	elif (regions['left']==range):
+		state_description = 'Case 1. Turn Left'
+		rotating=1
+		setState(1)
 	elif (regions['front']>wall_dist and regions['fright']>wall_dist):
 		state_description = 'Case 0. Wall Following'
 		setState(0)
@@ -148,17 +163,18 @@ def control():						#decides whats the next state based on perception
 		rotating=1
 		setState(2)
 	print(state_description)
-		
+	
+	
 #----------------------------------
-def printMeasures(sensor):
-	x = 0
-	while x<16 :
-		print('-----------------')
-		print(x)
-		print(sensor[x])
-		x=x+1
+def isEndpoint(regions):
+	endpoint = False
+	if ((regions['front']==range) and (regions['right']==range) and (regions['fright']==range) and (regions['bright']==range)):
+		endpoint=True
+	return endpoint
+	
 
 #----------------------------------
+
 
 def main():
 	print('### Program started')
@@ -181,8 +197,9 @@ def main():
             # Perception
 			sonar = getSonar(clientID, hRobot)
 			#print '### s', sonar
-			printMeasures(sonar)
-			
+			#printMeasures(sonar)
+			printRegions()
+
 			analyseSonar(sonar)
 			control()
 			
